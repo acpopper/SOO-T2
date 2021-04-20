@@ -13,6 +13,7 @@ struct queue {
   int quantum;
   int prioridad;
   Process* procesos;
+  int n_procesos;
   bool isEmpty;
 
 } ;
@@ -34,5 +35,5 @@ struct process {
   Queue* cola;
 } ;
 
-
-
+// Metodos
+Queue* queue_init(int cant_colas, int prioridad, int q, int procesos);
