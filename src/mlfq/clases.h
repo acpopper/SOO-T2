@@ -15,25 +15,38 @@ struct queue {
   Process* procesos;
   int n_procesos;
   bool isEmpty;
-
 } ;
 
 struct process {
   int PID;
   char nombre[32];
-  char* estado;
+  int estado;
+  // numero de veces que fue elegido
   int elegido;
+  // numero de veces que fue interrumpido
   int interrumpido;
+  // tiempo de termino - tiempo de llegada a la cola
   int turnaround_time;
+  // desde que llega hasta que se empieza a ejecutar
   int response_time;
-  int inicio;
+  // cuando llega a la cola
+  int llegada;
+  // ticks que pasa en CPU cada vez que entra (puede ser interrumpido)
   int cycles;
+  // cuantos ciclos pasan antes de ceder cpu
   int wait;
+  // cuantos ticks pasa en wait
   int delay;
+  // ticks que pasa en ready total
   int ready_time;
+  // ticks que pasa en waiting total
   int waiting_time;
+  // tick cuando termina
+  int terminado;
   Queue* cola;
 } ;
 
 // Metodos
 Queue* queue_init(int cant_colas, int prioridad, int q, int procesos);
+Process* process_init(int PID, char nombre[32], int estado, 
+int llegada, int cycles, int wait, int delay, Queue* cola);
