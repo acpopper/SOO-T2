@@ -58,4 +58,4 @@ int llegada, int cycles, int wait, int delay, Queue* cola);
 
 enum estados{RUNNING, READY, WAITING, FINISHED};
 
-bool allFinished(Queue* colas, int Q);
+bool allFinished(Queue* finished_queue, int n_procesos);
