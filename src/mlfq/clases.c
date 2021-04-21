@@ -16,7 +16,7 @@ Queue* queue_init(int cant_colas, int prioridad, int q, int procesos)
   return queue;
 }
 
-Process* process_init(int PID, char nombre[32], int estado,
+Process* process_init(int PID, char* nombre, int estado,
 int llegada, int cycles, int wait, int delay, Queue* cola)
 {
   Process* process = malloc(sizeof(Process));

@@ -19,7 +19,7 @@ struct queue {
 
 struct process {
   int PID;
-  char nombre[32];
+  char* nombre;
   int estado;
   // numero de veces que fue elegido
   int elegido;
@@ -48,5 +48,7 @@ struct process {
 
 // Metodos
 Queue* queue_init(int cant_colas, int prioridad, int q, int procesos);
-Process* process_init(int PID, char nombre[32], int estado, 
+Process* process_init(int PID, char* nombre, int estado, 
 int llegada, int cycles, int wait, int delay, Queue* cola);
+
+enum estados{RUNNING, READY, WAITING, FINISHED};
