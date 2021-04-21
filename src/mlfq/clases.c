@@ -3,15 +3,14 @@
 #include <stdbool.h>
 #include "clases.h"
 
-Queue* queue_init(int cant_colas, int prioridad, int q, int procesos)
+Queue* queue_init(int cant_colas, int prioridad, int q)
 {
   Queue* queue = malloc(sizeof(Queue));
   *queue = (Queue) {
     .quantum = (cant_colas-prioridad)*q,
-    .isEmpty = true,
     .prioridad = prioridad,
-    .n_procesos = procesos,
-    .procesos = calloc(procesos, sizeof(Process))
+    .head = NULL,
+    .tail = NULL
   };
   return queue;
 }
@@ -28,14 +27,31 @@ int llegada, int cycles, int wait, int delay, Queue* cola)
     .cycles=cycles,
     .wait=wait,
     .delay=delay,
-    .cola = cola,
+    .transcurrido=0,
+    .parent = cola,
     .elegido=0,
     .interrumpido=0,
     .turnaround_time=0,
     .response_time=0,
     .ready_time=0,
     .waiting_time=0,
-    .terminado=0
+    .terminado=0,
+    .prioridad=-1,
+    .next = NULL,
+    .prev = NULL
   };
   return process;
+}
+
+bool allFinished(Queue* finished_queue, int n_procesos){
+  int conteo = 0;
+  Process* current = finished_queue->head;
+  while(current){
+    conteo+=1;
+    current = current->next;
+  }
+  if(conteo==n_procesos){
+    return true;
+  }
+  return false;
 }

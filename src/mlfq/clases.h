@@ -12,9 +12,8 @@ typedef struct process Process;
 struct queue {
   int quantum;
   int prioridad;
-  Process* procesos;
-  int n_procesos;
-  bool isEmpty;
+  Process* head;
+  Process* tail;
 } ;
 
 struct process {
@@ -35,6 +34,8 @@ struct process {
   int cycles;
   // cuantos ciclos pasan antes de ceder cpu
   int wait;
+  // cuanto tiempo pasó desde el inicio del wait
+  int transcurrido;
   // cuantos ticks pasa en wait
   int delay;
   // ticks que pasa en ready total
@@ -43,12 +44,18 @@ struct process {
   int waiting_time;
   // tick cuando termina
   int terminado;
-  Queue* cola;
+  //prioridad de la cola actual, se usará para cambiar de cola
+  int prioridad;
+  Queue* parent;
+  Process* next;
+  Process* prev;
 } ;
 
 // Metodos
-Queue* queue_init(int cant_colas, int prioridad, int q, int procesos);
+Queue* queue_init(int cant_colas, int prioridad, int q);
 Process* process_init(int PID, char* nombre, int estado, 
 int llegada, int cycles, int wait, int delay, Queue* cola);
 
 enum estados{RUNNING, READY, WAITING, FINISHED};
+
+bool allFinished(Queue* colas, int Q);
