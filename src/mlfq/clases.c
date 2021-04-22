@@ -44,21 +44,23 @@ int llegada, int cycles, int wait, int delay, Queue* cola)
 }
 
 
-bool allFinished(Queue** colas, int Q){
+bool allFinished(Queue** colas, int Q, Queue* cola_finished){
+  if(!cola_finished->head){
+    return false;
+  }
+  for(int i=0; i<Q;i++){
+  // printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);    
+    Process* current = colas[i]->head;
+    while(current){
+      // printf("%s\n",current->nombre);
+      if(current->estado!=FINISHED){
+        return false;
+      }
+      current = current->next;
+    }
+  }
+  return true;
   
-  // for(int i=0; i<Q;i++){
-  // // printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);    
-  // Process* current = colas[i]->head;
-  //   while(current){
-  //     // printf("%s\n",current->nombre);
-  //     if(current->estado!=FINISHED){
-  //       return true;
-  //     }
-  //     current = current->next;
-  //   }
-  // }
-  // return true;
-  return false;
 }
 
 void llega_alguno(Queue* cola_starters, Queue** colas, int tick){

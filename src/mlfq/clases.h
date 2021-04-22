@@ -58,6 +58,6 @@ int llegada, int cycles, int wait, int delay, Queue* cola);
 
 enum estados{RUNNING, READY, WAITING, FINISHED};
 
-bool allFinished(Queue** colas, int Q);
+bool allFinished(Queue** colas, int Q, Queue* cola_finished);
 void llega_alguno(Queue* cola_starters, Queue** colas, int tick);
 void desanclar(Process* proceso);

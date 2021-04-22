@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     colas[i]=queue_init(Q, Q-1-i, q);
   }
   Queue* cola_starters=queue_init(Q, Q-1, -1);
+  Queue* cola_finished=queue_init(Q, Q-1, -1);
   // print de prueba
   // for(int i=0; i<Q;i++){
   //   printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);
@@ -60,7 +61,7 @@ int main(int argc, char **argv)
   //   current=current->next;  
   // }
   
-  while (!allFinished(colas, Q) && tick < 6){
+  while (!allFinished(colas, Q, cola_finished) && tick < 6){
     printf("Iter %i\n", tick);
     llega_alguno(cola_starters, colas, tick);
     // print de prueba
