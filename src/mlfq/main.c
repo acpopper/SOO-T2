@@ -64,29 +64,17 @@ int main(int argc, char **argv)
   
   while (!allFinished(colas, Q, cola_finished) && tick < 6){
     printf("Iter %i\n", tick);
+    sumar_tick(colas, Q, cola_running);
     llega_alguno(cola_starters, colas, tick);
-    // print de prueba
-    // Process* current = colas[0]->head;
-    // while(current){
-    //   if(current->estado==READY){
-    //   printf("%s\n", current->nombre);
-    //   }
-    //   current=current->next;  
-    // }
     
-    if(!someone_running(cola_running, Q)){
+    if(!someone_running(cola_running)){
       run_first_priority(colas, Q, tick, cola_running);
     }
     
-    Process* current = colas[0]->head;
-    while(current){
-      printf("%s, %i\n", current->nombre, current->estado);
-      
-      current=current->next;  
-    }
+    
 
 
-
+    print_de_prueba(colas, cola_running);
     tick+=1;
   }
   

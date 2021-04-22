@@ -34,7 +34,7 @@ struct process {
   int cycles;
   // cuantos ciclos pasan antes de ceder cpu
   int wait;
-  // cuanto tiempo pasó desde el inicio del wait [MOD]
+  // cuanto tiempo ha pasado en el estado actual [MOD]
   int transcurrido;
   // cuantos ticks pasa en wait
   int delay;
@@ -61,7 +61,9 @@ enum estados{RUNNING, READY, WAITING, FINISHED};
 bool allFinished(Queue** colas, int Q, Queue* cola_finished);
 void llega_alguno(Queue* cola_starters, Queue** colas, int tick);
 void desanclar(Process* proceso);
-bool someone_running(Queue* cola_running, int Q);
+bool someone_running(Queue* cola_running);
 void run_first_priority(Queue** colas, int Q, int tick, Queue* cola_running);
-void attach_to_head(Process* proceso, Queue* cola);
-void update_times_and_status(Queue** colas, int Q, int tick, Queue* cola_running);
+void move_to_head(Process* proceso, Queue* cola);
+void move_to_tail(Process* proceso, Queue* cola);
+void sumar_tick(Queue** colas, int Q, Queue* cola_running);
+void print_de_prueba(Queue** colas, Queue* running);
