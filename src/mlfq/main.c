@@ -62,7 +62,7 @@ int main(int argc, char **argv)
   //   current=current->next;  
   // }
   
-  while (!allFinished(colas, Q, cola_finished) && tick < 6){
+  while (!allFinished(colas, Q, cola_finished, cola_running) && tick < 6){
     printf("Iter %i\n", tick);
     sumar_tick(colas, Q, cola_running);
     llega_alguno(cola_starters, colas, tick);

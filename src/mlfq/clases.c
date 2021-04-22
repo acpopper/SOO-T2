@@ -44,8 +44,11 @@ int llegada, int cycles, int wait, int delay, Queue* cola)
 }
 
 
-bool allFinished(Queue** colas, int Q, Queue* cola_finished){
+bool allFinished(Queue** colas, int Q, Queue* cola_finished, Queue* cola_running){
   if(!cola_finished->head){
+    return false;
+  }
+  if(cola_running->head){
     return false;
   }
   for(int i=0; i<Q;i++){
