@@ -43,15 +43,65 @@ int llegada, int cycles, int wait, int delay, Queue* cola)
   return process;
 }
 
-bool allFinished(Queue* finished_queue, int n_procesos){
-  int conteo = 0;
-  Process* current = finished_queue->head;
-  while(current){
-    conteo+=1;
-    current = current->next;
-  }
-  if(conteo==n_procesos){
-    return true;
-  }
+
+bool allFinished(Queue** colas, int Q){
+  
+  // for(int i=0; i<Q;i++){
+  // // printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);    
+  // Process* current = colas[i]->head;
+  //   while(current){
+  //     // printf("%s\n",current->nombre);
+  //     if(current->estado!=FINISHED){
+  //       return true;
+  //     }
+  //     current = current->next;
+  //   }
+  // }
+  // return true;
   return false;
+}
+
+void llega_alguno(Queue* cola_starters, Queue** colas, int tick){
+  Queue* cola_inicial = colas[0];
+  Process* current = cola_starters->head;
+  
+  
+  while (current){
+    Process* aux = current->next;
+    if(current->llegada == tick){
+      current->estado=READY;
+      desanclar(current);
+      current->parent=cola_inicial;
+      if(!cola_inicial->head){        
+        cola_inicial->head=current;
+        cola_inicial->tail=current;
+
+      }
+      else{
+        current->prev=cola_inicial->tail;
+        cola_inicial->tail->next=current;
+        cola_inicial->tail=current;
+      }
+    }
+    current=aux;
+  }
+}
+
+void desanclar(Process* proceso){
+  if(proceso->prev && proceso->next){            
+    proceso->prev->next=proceso->next;
+    proceso->next->prev=proceso->prev;
+  }
+  else if(proceso->prev){
+    proceso->parent->tail=proceso->prev;
+    proceso->prev->next=NULL;
+  }
+  else if(proceso->next){            
+    proceso->parent->head=proceso->next;
+    proceso->next->prev=NULL;            
+  } else{
+    proceso->parent->head=NULL;
+    proceso->parent->tail=NULL;
+  }
+  proceso->parent=NULL;
 }
