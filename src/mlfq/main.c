@@ -25,6 +25,7 @@ int main(int argc, char **argv)
   }
   Queue* cola_starters=queue_init(Q, Q-1, -1);
   Queue* cola_finished=queue_init(Q, Q-1, -1);
+  Queue* cola_running=queue_init(Q, Q-1, -1);
   // print de prueba
   // for(int i=0; i<Q;i++){
   //   printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);
@@ -73,8 +74,8 @@ int main(int argc, char **argv)
     //   current=current->next;  
     // }
     
-    if(!someone_running(colas, Q)){
-      run_first_priority(colas, Q);
+    if(!someone_running(cola_running, Q)){
+      run_first_priority(colas, Q, tick, cola_running);
     }
     
     Process* current = colas[0]->head;

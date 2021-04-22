@@ -20,31 +20,31 @@ struct process {
   int PID;
   char* nombre;
   int estado;
-  // numero de veces que fue elegido
+  // numero de veces que fue elegido [MOD]
   int elegido;
-  // numero de veces que fue interrumpido
+  // numero de veces que fue interrumpido [MOD]
   int interrumpido;
-  // tiempo de termino - tiempo de llegada a la cola
+  // tiempo de termino - tiempo de llegada a la cola [MOD]
   int turnaround_time;
-  // desde que llega hasta que se empieza a ejecutar
+  // desde que llega hasta que se empieza a ejecutar [MOD]
   int response_time;
   // cuando llega a la cola
   int llegada;
-  // ticks que pasa en CPU cada vez que entra (puede ser interrumpido)
+  // ticks que pasa en CPU 
   int cycles;
   // cuantos ciclos pasan antes de ceder cpu
   int wait;
-  // cuanto tiempo pasó desde el inicio del wait
+  // cuanto tiempo pasó desde el inicio del wait [MOD]
   int transcurrido;
   // cuantos ticks pasa en wait
   int delay;
-  // ticks que pasa en ready total
+  // ticks que pasa en ready total [MOD]
   int ready_time;
-  // ticks que pasa en waiting total
+  // ticks que pasa en waiting total [MOD]
   int waiting_time;
-  // tick cuando termina
+  // tick cuando termina [MOD]
   int terminado;
-  //prioridad de la cola actual, se usará para cambiar de cola
+  //prioridad de la cola actual, se usará para cambiar de cola [MOD]
   int prioridad;
   Queue* parent;
   Process* next;
@@ -61,6 +61,7 @@ enum estados{RUNNING, READY, WAITING, FINISHED};
 bool allFinished(Queue** colas, int Q, Queue* cola_finished);
 void llega_alguno(Queue* cola_starters, Queue** colas, int tick);
 void desanclar(Process* proceso);
-bool someone_running(Queue** colas, int Q);
-void run_first_priority(Queue** colas, int Q);
+bool someone_running(Queue* cola_running, int Q);
+void run_first_priority(Queue** colas, int Q, int tick, Queue* cola_running);
 void attach_to_head(Process* proceso, Queue* cola);
+void update_times_and_status(Queue** colas, int Q, int tick, Queue* cola_running);

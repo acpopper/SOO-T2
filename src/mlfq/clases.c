@@ -111,18 +111,11 @@ void desanclar(Process* proceso){
   proceso->prev=NULL;
 }
 
-bool someone_running(Queue** colas, int Q){
-for(int i=0; i<Q;i++){
-    Process* current = colas[i]->head;
-    while(current){
-      // printf("%s\n",current->nombre);
-      if(current->estado==RUNNING){
-        return true;
-      }
-      current = current->next;
-    }
-  }
-  return false;
+bool someone_running(Queue* cola_running, int Q){
+if(cola_running->head){
+  return true;
+}
+return false;
 }
 
 void attach_to_head(Process* proceso, Queue* cola){
@@ -139,15 +132,21 @@ void attach_to_head(Process* proceso, Queue* cola){
   }
 }
 
-void run_first_priority(Queue** colas, int Q){
+
+void run_first_priority(Queue** colas, int Q, int tick, Queue* cola_running){
   for(int i=0; i<Q;i++){
     Process* current = colas[i]->head;
     while(current){
       // printf("%s\n",current->nombre);
       if(current->estado==READY){
         current->estado=RUNNING;
+        if(current->elegido==0){
+          current->response_time=tick-current->llegada;
+        }
+        current->elegido+=1;
+
         desanclar(current);
-        attach_to_head(current, colas[i]);
+        attach_to_head(current, cola_running);
         break;
       }
       current = current->next;
@@ -155,6 +154,27 @@ void run_first_priority(Queue** colas, int Q){
   }
 }
 
+void update_times_and_status(Queue** colas, int Q, int tick, Queue* cola_running){
+  if(cola_running->head){
+    cola_running->head->cycles-=1;
+  }
+  for(int i=0; i<Q;i++){
+    Process* current = colas[i]->head;
+    while(current){
+      if(current->estado==WAITING){
+        current->transcurrido+=1;
+        current->waiting_time+=1;
+        if(current->wait==current->transcurrido){
+          current->estado=READY;
+          current->transcurrido=0;
+        }
+      }
 
+      else if(current->estado==READY){
+        current->ready_time+=1;
+      }
+      }
+    current = current->next;
+}
 
 

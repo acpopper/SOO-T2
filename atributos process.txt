@@ -1,0 +1,32 @@
+int PID;
+char* nombre;
+int estado;
+// numero de veces que fue elegido
+int elegido;
+// numero de veces que fue interrumpido
+int interrumpido;
+// tiempo de termino - tiempo de llegada a la cola
+int turnaround_time;
+// desde que llega hasta que se empieza a ejecutar
+int response_time;
+// cuando llega a la cola
+int llegada;
+// ticks que pasa en CPU cada vez que entra (puede ser interrumpido)
+int cycles;
+// cuantos ciclos pasan antes de ceder cpu
+int wait;
+// cuanto tiempo pasó desde el inicio del wait
+int transcurrido;
+// cuantos ticks pasa en wait
+int delay;
+// ticks que pasa en ready total
+int ready_time;
+// ticks que pasa en waiting total
+int waiting_time;
+// tick cuando termina
+int terminado;
+//prioridad de la cola actual, se usará para cambiar de cola
+int prioridad;
+Queue* parent;
+Process* next;
+Process* prev;
