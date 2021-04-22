@@ -61,3 +61,6 @@ enum estados{RUNNING, READY, WAITING, FINISHED};
 bool allFinished(Queue** colas, int Q, Queue* cola_finished);
 void llega_alguno(Queue* cola_starters, Queue** colas, int tick);
 void desanclar(Process* proceso);
+bool someone_running(Queue** colas, int Q);
+void run_first_priority(Queue** colas, int Q);
+void attach_to_head(Process* proceso, Queue* cola);

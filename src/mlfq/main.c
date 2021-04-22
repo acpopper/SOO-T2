@@ -65,11 +65,22 @@ int main(int argc, char **argv)
     printf("Iter %i\n", tick);
     llega_alguno(cola_starters, colas, tick);
     // print de prueba
+    // Process* current = colas[0]->head;
+    // while(current){
+    //   if(current->estado==READY){
+    //   printf("%s\n", current->nombre);
+    //   }
+    //   current=current->next;  
+    // }
+    
+    if(!someone_running(colas, Q)){
+      run_first_priority(colas, Q);
+    }
+    
     Process* current = colas[0]->head;
     while(current){
-      if(current->estado==READY){
-      printf("%s\n", current->nombre);
-      }
+      printf("%s, %i\n", current->nombre, current->estado);
+      
       current=current->next;  
     }
 

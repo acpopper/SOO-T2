@@ -36,7 +36,7 @@ int llegada, int cycles, int wait, int delay, Queue* cola)
     .ready_time=0,
     .waiting_time=0,
     .terminado=0,
-    .prioridad=-1,
+    .prioridad=(cola ? cola->prioridad : -1),
     .next = NULL,
     .prev = NULL
   };
@@ -74,6 +74,7 @@ void llega_alguno(Queue* cola_starters, Queue** colas, int tick){
       current->estado=READY;
       desanclar(current);
       current->parent=cola_inicial;
+      current->prioridad = cola_inicial->prioridad;
       if(!cola_inicial->head){        
         cola_inicial->head=current;
         cola_inicial->tail=current;
@@ -106,4 +107,54 @@ void desanclar(Process* proceso){
     proceso->parent->tail=NULL;
   }
   proceso->parent=NULL;
+  proceso->next=NULL;
+  proceso->prev=NULL;
 }
+
+bool someone_running(Queue** colas, int Q){
+for(int i=0; i<Q;i++){
+    Process* current = colas[i]->head;
+    while(current){
+      // printf("%s\n",current->nombre);
+      if(current->estado==RUNNING){
+        return true;
+      }
+      current = current->next;
+    }
+  }
+  return false;
+}
+
+void attach_to_head(Process* proceso, Queue* cola){
+  if(cola->head){
+    proceso->parent = cola;
+    cola->head->prev=proceso;
+    proceso->next=cola->head;
+    cola->head=proceso;
+  }
+  else{
+    proceso->parent=cola;
+    cola->head=proceso;
+    cola->tail=proceso;
+  }
+}
+
+void run_first_priority(Queue** colas, int Q){
+  for(int i=0; i<Q;i++){
+    Process* current = colas[i]->head;
+    while(current){
+      // printf("%s\n",current->nombre);
+      if(current->estado==READY){
+        current->estado=RUNNING;
+        desanclar(current);
+        attach_to_head(current, colas[i]);
+        break;
+      }
+      current = current->next;
+    }
+  }
+}
+
+
+
+
