@@ -77,6 +77,7 @@ void llega_alguno(Queue* cola_starters, Queue** colas, int tick){
       current->estado=READY;
       desanclar(current);
       current->parent=cola_inicial;
+      current->transcurrido=0;
       current->prioridad = cola_inicial->prioridad;
       if(!cola_inicial->head){        
         cola_inicial->head=current;
@@ -149,6 +150,7 @@ void move_to_tail(Process* proceso, Queue* cola){
     cola->head=proceso;
     cola->tail=proceso;
   }
+  proceso->prioridad=cola->prioridad;
 }
 
 
@@ -181,8 +183,8 @@ void sumar_tick(Queue** colas, int Q, Queue* cola_running){
   for(int i=0; i<Q;i++){
     Process* current = colas[i]->head;
     while(current){
-      current->transcurrido+=1;
-      if(current->estado==WAITING){        
+      if(current->estado==WAITING){     
+        current->transcurrido+=1;
         current->waiting_time+=1;
       }
       else if(current->estado==READY){
@@ -193,16 +195,73 @@ void sumar_tick(Queue** colas, int Q, Queue* cola_running){
 }
 }
 
-void print_de_prueba(Queue** colas, Queue* running){
-  Process* current = colas[0]->head;
+void print_de_prueba(Queue** colas, Queue* running, int Q){
   if(running->head){
-    printf("Running: %s (%i) tiempo aca %i\n", running->head->nombre, running->head->estado, running->head->transcurrido);
+    printf("Running: %s tiempo aca %i\n", running->head->nombre, running->head->transcurrido);
   }
-  while(current){
-    printf("En cola: %s (%i) tiempo aca %i\n", current->nombre, current->estado, current->transcurrido);
+  
+  for(int i=0; i<Q; i++){
+    Process* current = colas[i]->head;
+    while(current){
+      if(current->estado==READY){
+        printf("En cola (R): %s \n", current->nombre);
+      }
+      else{
+        printf("En cola (W): %s tiempo aca %i\n", current->nombre, current->transcurrido);
+      }
+    
     
     current=current->next;  
   }
+  }
+  
 }
 
+Queue* find_parent_by_priority(Queue** colas, int Q, int p){
+  if(p==Q){
+    return colas[0];
+  }
+  else if(p==-1){
+    return colas[Q-1];
+  }
+  for(int i=0; i<Q; i++){
+    if(colas[i]->prioridad==p){
+      return colas[i];
+    }
+  }
+  return NULL;
+}
+
+// ver si el proceso corriendo cede, se interrumpe o termina
+void time_up_check(Queue** colas, Queue* cola_running, Queue* cola_finished, int tick, int Q){
+  Process* current = cola_running->head;
+  //si termina:
+  if(current->cycles==0){
+    current->estado=FINISHED;
+    current->terminado=tick;
+    current->turnaround_time=tick-current->llegada;
+    move_to_tail(current, cola_finished);
+  }
+  else{
+    bool interrumpido=false;
+    bool cede=false;
+    //si lleva running lo que dura el quantum (se interrumpe):
+    if(current->transcurrido==find_parent_by_priority(colas, Q, current->prioridad)->quantum){
+      interrumpido=true;
+      current->estado=READY;
+      current->interrumpido+=1;
+    }
+    if(current->transcurrido==current->wait){
+      cede=true;
+      current->estado=WAITING;
+      current->transcurrido=0;
+    }
+    if(interrumpido){
+      move_to_tail(current, find_parent_by_priority(colas, Q, current->prioridad-1));
+
+    } else if(cede){
+      move_to_tail(current, find_parent_by_priority(colas, Q, current->prioridad+1));
+    }
+  }
+}
 

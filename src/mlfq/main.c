@@ -62,19 +62,24 @@ int main(int argc, char **argv)
   //   current=current->next;  
   // }
   
-  while (!allFinished(colas, Q, cola_finished, cola_running) && tick < 6){
+  while (!allFinished(colas, Q, cola_finished, cola_running) && tick < 20){
     printf("Iter %i\n", tick);
+    // todos pasaron 1 tiempo en su estado
     sumar_tick(colas, Q, cola_running);
+    //ver si llega otro proceso NUEVO
     llega_alguno(cola_starters, colas, tick);
-    
+    // Si no hay ninguno corriendo, se corre el de mayor prioridad
     if(!someone_running(cola_running)){
       run_first_priority(colas, Q, tick, cola_running);
     }
-    
+    // Si hay uno corriendo se revisa si se terminó, si se acabó el quantum y/o si se va a wait por su cuenta
+    if(someone_running(cola_running)){
+      time_up_check(colas, cola_running, cola_finished, tick, Q);
+    }
     
 
 
-    print_de_prueba(colas, cola_running);
+    print_de_prueba(colas, cola_running, Q);
     tick+=1;
   }
   
