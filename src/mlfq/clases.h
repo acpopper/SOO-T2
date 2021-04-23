@@ -41,8 +41,11 @@ struct process {
   // cuantos tiempos pasan antes de ceder cpu
   int wait;
 
-  // cuanto tiempo ha pasado en el estado actual [MOD]
-  int transcurrido;
+  // cuanto tiempo ha pasado en el estado waiting [MOD]
+  int transcurrido_waiting;
+
+  // cuanto tiempo falta para wait [MOD]
+  int transcurrido_exec;
 
   // cuantos ticks pasa en wait
   int delay;
@@ -81,3 +84,4 @@ void sumar_tick(Queue** colas, int Q, Queue* cola_running);
 void print_de_prueba(Queue** colas, Queue* running, int Q);
 Queue* find_parent_by_priority(Queue** colas, int Q, int p);
 void time_up_check(Queue** colas, Queue* cola_running, Queue* cola_finished, int tick, int Q);
+void waiting_to_ready(Queue** colas, int Q);

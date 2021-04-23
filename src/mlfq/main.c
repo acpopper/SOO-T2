@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   // for(int i=0; i<Q;i++){
   //   printf("Cola %i, prioridad %i, quantum %i\n",i, colas[i]->prioridad, colas[i]->quantum);
   // }  
-
+  
   for(int linea = 0; linea<n_procesos;linea++){
     //variables para instanciar un proceso
     char* nombre=archivo->lines[linea][0];
@@ -42,16 +42,19 @@ int main(int argc, char **argv)
     int delay=strtol(archivo->lines[linea][5], NULL, 10);
     // printf("%s, %i, %i, %i, %i, %i, %i\n", nombre, PID, estado, llegada, cycles, wait, delay);
     Process* current = process_init(PID, nombre, estado, llegada, cycles, wait, delay, NULL);
+    
     if(linea==0){
       cola_starters->head=current;
       cola_starters->tail=current;
       current->parent=cola_starters;
+      
     }
     else{
       current->prev=cola_starters->tail;
       cola_starters->tail->next=current;
       current->parent=cola_starters;
       cola_starters->tail=current;
+      
     }
   }
   
@@ -62,26 +65,45 @@ int main(int argc, char **argv)
   //   current=current->next;  
   // }
   
-  while (!allFinished(colas, Q, cola_finished, cola_running) && tick < 20){
-    printf("Iter %i\n", tick);
+  while (!allFinished(colas, Q, cola_finished, cola_running) && tick<17){
+    printf("¨¨ITER %i¨¨\n", tick);
     // todos pasaron 1 tiempo en su estado
     sumar_tick(colas, Q, cola_running);
+
+    // los waiting que pasan a ready lo hacen
+    waiting_to_ready(colas, Q);
+
     //ver si llega otro proceso NUEVO
     llega_alguno(cola_starters, colas, tick);
+    
     // Si no hay ninguno corriendo, se corre el de mayor prioridad
-    if(!someone_running(cola_running)){
-      run_first_priority(colas, Q, tick, cola_running);
-    }
+    // if(!someone_running(cola_running)){
+    //   run_first_priority(colas, Q, tick, cola_running);
+    // }
+    
     // Si hay uno corriendo se revisa si se terminó, si se acabó el quantum y/o si se va a wait por su cuenta
     if(someone_running(cola_running)){
       time_up_check(colas, cola_running, cola_finished, tick, Q);
     }
-    
 
 
+    if(!someone_running(cola_running)){
+      run_first_priority(colas, Q, tick, cola_running);
+    }
     print_de_prueba(colas, cola_running, Q);
     tick+=1;
+    printf("\n");
   }
+  
+  Process* current = cola_finished->head;
+  while (current)
+  {
+    printf("Finished: %s, interr %i, elegido %i, turnaround %i, response %i, r+w %i\n", 
+    current->nombre, current->interrumpido, current->elegido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
+    current=current->next;
+  }
+  
+  
   
   
   fclose(output_file);
