@@ -65,7 +65,7 @@ int main(int argc, char **argv)
   //   current=current->next;  
   // }
   
-  while (!allFinished(colas, Q, cola_finished, cola_running) && tick<17){
+  while (!allFinished(colas, Q, cola_finished, cola_running)){
     printf("¨¨ITER %i¨¨\n", tick);
     // todos pasaron 1 tiempo en su estado
     sumar_tick(colas, Q, cola_running);

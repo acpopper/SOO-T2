@@ -253,9 +253,9 @@ void time_up_check(Queue** colas, Queue* cola_running, Queue* cola_finished, int
     int K = find_parent_by_priority(colas, Q, current->prioridad)->quantum;
     int ex = (current->transcurrido_exec);
     int w = (current->wait);
-    printf("w %i ex %i K %i\n", w, ex, K);
+    // printf("w %i ex %i K %i\n", w, ex, K);
     if(w-K==ex){
-      printf("Se interrumpe\n");
+      // printf("Se interrumpe\n");
       interrumpido=true;
       current->estado=READY;
       current->interrumpido+=1;
