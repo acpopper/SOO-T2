@@ -307,3 +307,27 @@ void special_time(Queue** colas, int Q, int tick, int S){
     }
   }
 }
+
+
+void destruccion_total(Queue** colas, int Q, Queue* starter, Queue* finished, Queue* running){
+  for(int i=0; i<Q; i++){
+    free(colas[i]);
+  }
+  free(colas);
+  free(starter);
+  free(running);
+  list_destroy(finished->head);
+  free(finished);
+}
+
+void list_destroy(Process *proceso)
+{
+  // Si hay un nodo en la sig posicion, llamamos recursivamente a la funcion
+  if (proceso->next)
+  {
+    list_destroy(proceso->next);
+  }
+  
+  // Luego, liberamos la lista
+  free(proceso);
+}

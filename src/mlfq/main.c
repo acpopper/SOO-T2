@@ -66,7 +66,7 @@ int main(int argc, char **argv)
   // }
   
   while (!allFinished(colas, Q, cola_finished, cola_running)){
-    printf("¨¨ITER %i¨¨\n", tick);
+    // printf("¨¨ITER %i¨¨\n", tick);
     // todos pasaron 1 tiempo en su estado
     sumar_tick(colas, Q, cola_running);
 
@@ -95,8 +95,8 @@ int main(int argc, char **argv)
     special_time(colas, Q, tick, S);
     
     //print de colas en cada iteración
-    print_de_prueba(colas, cola_running, Q);
-    printf("\n");
+    // print_de_prueba(colas, cola_running, Q);
+    // printf("\n");
 
     // Se suma un tick al tiempo
     tick+=1;
@@ -105,13 +105,15 @@ int main(int argc, char **argv)
   Process* current = cola_finished->head;
   while (current)
   { fprintf(output_file, "%s,%i,%i,%i,%i,%i\n", current->nombre, current->elegido, current->interrumpido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
-    printf("Finished: %s, elegido %i, interr %i, turnaround %i, response %i, r+w %i\n", 
-    current->nombre, current->elegido, current->interrumpido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
+    // printf("Finished: %s, elegido %i, interr %i, turnaround %i, response %i, r+w %i\n", 
+    // current->nombre, current->elegido, current->interrumpido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
     current=current->next;
   }
   
   
-  
-  
+  printf("aca\n");
+  destruccion_total(colas, Q, cola_starters, cola_finished, cola_running);
+  printf("aca2\n");
+  input_file_destroy(archivo);
   fclose(output_file);
 }
