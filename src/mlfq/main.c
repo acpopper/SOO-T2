@@ -90,16 +90,23 @@ int main(int argc, char **argv)
     if(!someone_running(cola_running)){
       run_first_priority(colas, Q, tick, cola_running);
     }
+
+    // SPECIAL TIME
+    special_time(colas, Q, tick, S);
+    
+    //print de colas en cada iteración
     print_de_prueba(colas, cola_running, Q);
-    tick+=1;
     printf("\n");
+
+    // Se suma un tick al tiempo
+    tick+=1;
   }
   
   Process* current = cola_finished->head;
   while (current)
-  {
-    printf("Finished: %s, interr %i, elegido %i, turnaround %i, response %i, r+w %i\n", 
-    current->nombre, current->interrumpido, current->elegido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
+  { fprintf(output_file, "%s,%i,%i,%i,%i,%i\n", current->nombre, current->elegido, current->interrumpido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
+    printf("Finished: %s, elegido %i, interr %i, turnaround %i, response %i, r+w %i\n", 
+    current->nombre, current->elegido, current->interrumpido, current->turnaround_time, current->response_time, current->ready_time+current->waiting_time);
     current=current->next;
   }
   

@@ -260,7 +260,7 @@ void time_up_check(Queue** colas, Queue* cola_running, Queue* cola_finished, int
       current->estado=READY;
       current->interrumpido+=1;
     }
-    if(current->transcurrido_exec==0){
+    if(current->transcurrido_exec==0 && current->wait!=0){
       cede=true;
       current->estado=WAITING;
       current->transcurrido_exec=current->wait;
@@ -289,3 +289,21 @@ void waiting_to_ready(Queue** colas, int Q){
 
 }
 
+
+void special_time(Queue** colas, int Q, int tick, int S){
+  
+  if(!(tick%S)){  
+    for(int i=1; i<Q; i++){
+      if(colas[i]->head){
+        Process* aux;
+        Process* current = colas[i]->head;
+        while(current){
+          aux = current->next;
+          move_to_tail(current, colas[0]);
+          current=aux;  
+        }
+        free(aux);
+      }
+    }
+  }
+}

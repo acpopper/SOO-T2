@@ -85,3 +85,4 @@ void print_de_prueba(Queue** colas, Queue* running, int Q);
 Queue* find_parent_by_priority(Queue** colas, int Q, int p);
 void time_up_check(Queue** colas, Queue* cola_running, Queue* cola_finished, int tick, int Q);
 void waiting_to_ready(Queue** colas, int Q);
+void special_time(Queue** colas, int Q, int tick, int S);
